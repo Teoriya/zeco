@@ -15,7 +15,7 @@ module.exports = {
   callback: async ({ message, args }) => {
 
     const mention = message.mentions.users.first()
-    console.log(args)
+    // console.log(args)
 
     if (!mention) {
       message.reply('Please tag a user to add coins to.')

@@ -9,18 +9,15 @@ const dbName = process.env.DB_NAME;
 const url = `mongodb://${dbHost}:${dbPort}/${dbName}`
 
 client.on('ready', () => {
-    new WOKCommands(client, {
+    const wok = new WOKCommands(client, {
         commandsDir: path.join(__dirname, 'commands'),
         featuresDir: path.join(__dirname, 'features'),
         delErrMsgCooldown: 5,
         defaultLangauge: 'english',
         ignoreBots: true,
         testServers:'884393176255848498' ,
-        disabledDefaultCommands: [
-             'language',
-        ]
+        mongoUri: url
     })
-        .setMongoPath(url)
 })
 
 client.login(process.env.TOKEN1)

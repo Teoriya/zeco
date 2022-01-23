@@ -6,5 +6,9 @@ module.exports = {
     reqNumber: {
         type: Number,
         required: true
+    },
+    reqBool:{
+        type: Boolean,
+        required: true
     }
 };

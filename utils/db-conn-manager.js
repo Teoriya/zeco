@@ -19,7 +19,7 @@ const dbConnManager  = {
     safeConnect: async() => {
         try{
             const mongoose =  await dbConnManager.connect();
-            console.log(`Connected to database; ${dbName} at ${dbHost}:${dbPort}`);
+            // console.log(`Connected to database; ${dbName} at ${dbHost}:${dbPort}`);
             return mongoose
         } catch (error){
 
