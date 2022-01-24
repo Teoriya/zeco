@@ -1,13 +1,9 @@
 const mongoose = require('mongoose');
 require('dotenv').config()
-
-const dbHost = process.env.DB_HOST;
-const dbPort = process.env.DB_PORT;
-const dbName = process.env.DB_NAME;
+url = process.env.DBURL
 
 const dbConnManager  = {
     connect: () => {
-        const url = `mongodb://${dbHost}:${dbPort}/${dbName}`
         return mongoose.connect(url,{
             useNewUrlParser: true,
             useUnifiedTopology:true,
