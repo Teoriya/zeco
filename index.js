@@ -3,10 +3,16 @@ const Discord = require('discord.js');
 const path = require('path')
 const WOKCommands = require('wokcommands')
 const client = new Discord.Client({ intents: [Object.keys(Discord.Intents.FLAGS)] })
-const dbHost = process.env.DB_HOST;
-const dbPort = process.env.DB_PORT;
-const dbName = process.env.DB_NAME;
-const url = `mongodb://${dbHost}:${dbPort}/${dbName}`
+const fs = require("fs");
+const machineId = fs.readdirSync(`./machine/`)[0]
+if(machineId == "entermachineid")
+{
+    console.log("rename the file in  ./machine/entermachineid")
+    return
+}
+
+owners = process.env.OWNERS.split(',')
+servers = process.env.SERVERS.split(',')
 
 client.on('ready', () => {
     new WOKCommands(client, {
@@ -15,12 +21,15 @@ client.on('ready', () => {
         delErrMsgCooldown: 5,
         defaultLangauge: 'english',
         ignoreBots: true,
-        testServers:'884393176255848498' ,
+        testServers: servers ,
+        botOwners: owners,
         disabledDefaultCommands: [
              'language',
-        ]
+        ],
+        mongoUri: process.env.DBURL,
     })
-        .setMongoPath(url)
+    let logChannel = client.channels.cache.get(process.env.onlineLog)
+    logChannel.send(`Bot online - MACHINE - ${machineId}`)
 })
 
 client.login(process.env.TOKEN1)
