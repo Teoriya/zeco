@@ -11,7 +11,7 @@ module.exports = {
         }
         catch(e){console.log(e)}
         finally {
-            mongoose.connection.close();
+            //mongoose.connection.close();
         }
     }
 }
