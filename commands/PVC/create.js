@@ -30,24 +30,19 @@ module.exports = {
 
     userCoins = await economy.getCoins({ guildId, userId });
 
-    //
-    // console.log(text);
     text = text.split(" ").join(""); //added for covering corner cases of checking for duplicates
     let matches = text.match(/\d+/g);
     let letters = text.match(/\D+/g) || [];
     let time = 0;
-    // console.log({ matches, letters });
     if (new Set(letters).size !== letters.length) console.log("Error"); // Checking for duplicates
     for (let i = 0; i < letters.length; i++) {
       // Converting in seconds
-      if (letters[i].length != 1) console.log("Error");
       if (letters[i][0] == "h") time += matches[i] * 60 * 60;
       if (letters[i][0] == "m") time += matches[i] * 60;
       if (letters[i][0] == "s") time += matches[i] * 1;
     }
     if (matches.length - 1 == letters.length)
       time += matches[letters.length] * 1;
-    // console.log({time});
     if (time < 60) {
       await message.reply(
         "Create a PVC of atlest 1 min. ||Dont be a CHEAPDA||"
@@ -55,17 +50,9 @@ module.exports = {
       return;
     }
     let currentDate = message.createdTimestamp.toString().slice(0, -3);
-    // console.log({currentDate})
-
     currentDate = parseInt(currentDate);
 
     endDate = currentDate + time;
-    // date = new Date(endDate).toUTCString()
-
-    // interval = date - currentDate
-    // console.log({interval})
-    // console.log({message});
-    // console.log(message.author.username + "'s PVC created till: " + new Date(endDate).toUTCString() );
 
     cost = time * 2;
 
@@ -124,7 +111,7 @@ module.exports = {
       }
       //to prevent bot crash after 30 seconds <close>
       let btnreply = ButtonInteraction.first().customId;
-      console.log(btnreply);
+      // console.log(btnreply);
       if (btnreply == "reject") {
         return await ButtonInteraction.first().reply({
           content: "CANCELLED",
@@ -179,11 +166,6 @@ module.exports = {
         content: `Pvc ends <t:${endDate}:R>`,
       }); //embed bhi add krna help vaala
       await helpMessage.pin();
-      // console.log(`Time Remaining: <t:${endDate}:R>`)
-
-      // console.log({endDate})
-      // console.log({timeRem})
-
       textId = textChannel.id;
       vcId = voiceChannel.id;
       messageId = helpMessage.id;

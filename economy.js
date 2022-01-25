@@ -5,14 +5,11 @@ const coinsCache = {}; // { 'guildId-userId': coins }
 
 module.exports = {
   addCoins: connBoilerPlate(async ({ guildId, userId, coins }) => {
-    // console.log('Running findOneAndUpdate()')
     const result = await profileSchema.findOneAndUpdate(
       { guildId, userId },
       { guildId, userId, $inc: { coins } },
       { upsert: true, new: true }
     );
-
-    // console.log('RESULT:', result)
 
     coinsCache[`${guildId}-${userId}`] = result.coins;
 
@@ -21,23 +18,18 @@ module.exports = {
 
   getCoins: connBoilerPlate(async ({ guildId, userId }) => {
     const cachedValue = coinsCache[`${guildId}-${userId}`];
-    // console.log({ cachedValue })
     if (cachedValue || cachedValue == 0) {
       return cachedValue;
     }
-    // console.log('Running findOne()')
     const result = await profileSchema.findOne({
       guildId,
       userId,
     });
 
-    // console.log('RESULT:', result)
-
     let coins = 0;
     if (result) {
       coins = result.coins;
     } else {
-      // console.log('Inserting a document')
       await new profileSchema({
         guildId,
         userId,

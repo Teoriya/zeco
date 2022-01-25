@@ -6,7 +6,6 @@ cacheData = [];
 
 module.exports = {
   setup: connBoilerPlate(async ({ guildId, categId }) => {
-    // console.log('Running findOneAndUpdate()')
     await pvcSchema.findOneAndUpdate(
       { guildId },
       { guildId, categId, chanId },
@@ -14,29 +13,23 @@ module.exports = {
     );
   }),
   findCateg: connBoilerPlate(async ({ guildId }) => {
-    // console.log(guildId)
     result = await pvcSchema.findOne({ guildId });
-    // console.log({result})
     return result;
   }),
-  deletePVC: connBoilerPlate(async ({ guildId, textId }) => {
-    // console.log(guildId)
+  findPVC: connBoilerPlate(async ({ guildId, textId }) => {
     result = cacheData.filter(
       (pvc) => pvc.guildId == guildId && pvc.textId == textId
     );
-    // console.log(result);
-
+    return result[0];
+  }),
+  deletePVC: connBoilerPlate(async ({ guildId, textId }) => {
     cacheData = cacheData.filter(
       (pvc) => pvc.guildId != guildId || pvc.textId != textId
     );
-    // console.log({ result });
     await pvcstSchema.findOneAndRemove({ guildId, textId });
-    // console.log({ result });
-    return result[0];
   }),
   pvcCreate: connBoilerPlate(
     async ({ guildId, userId, textId, vcId, messageId, endTime }) => {
-      // console.log(guildId)
       newEntry = await new pvcstSchema({
         guildId,
         userId,
@@ -48,15 +41,11 @@ module.exports = {
         messageId,
       }).save();
       cacheData.push(newEntry);
-      // console.log(newEntry)
     }
   ),
   pvcGetData: connBoilerPlate(async ({}) => {
-    // console.log("test")
     cacheData = await pvcstSchema.find({});
-    // console.log("Got it");
     return cacheData;
-    // console.log({cacheData})
   }),
   timer: connBoilerPlate(async (client) => {
     for (let i = 0; i < cacheData.length; i++) {
@@ -66,7 +55,6 @@ module.exports = {
         if (cacheData[i].endTime < date) {
           txt = await client.channels.fetch(cacheData[i].textId);
           vc = await client.channels.fetch(cacheData[i].vcId);
-          // console.log({txt})
           await txt.delete();
           await vc.delete();
           await pvcstSchema.findByIdAndDelete(cacheData[i]._id);
